@@ -4,8 +4,6 @@ import terser from '@rollup/plugin-terser';
 import postcss from 'rollup-plugin-postcss';
 import dts from 'rollup-plugin-dts';
 
-const packageJson = require('./package.json');
-
 const config = [
   {
     input: 'src/index.ts',
@@ -53,4 +51,4 @@ const config = [
   },
 ];
 
-export default config; 
+export default config;
