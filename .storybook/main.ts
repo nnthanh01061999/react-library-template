@@ -11,8 +11,32 @@ const config: StorybookConfig = {
     name: '@storybook/react-webpack5',
     options: {},
   },
-  webpackFinal: async (config) => {
-    // Add custom webpack configuration here if needed
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      compilerOptions: {
+        allowSyntheticDefaultImports: false,
+        esModuleInterop: false,
+      },
+      propFilter: prop => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+    },
+  },
+  webpackFinal: async config => {
+    // Make sure Storybook webpack can handle TypeScript files
+    if (config.module && config.module.rules) {
+      // Update the TypeScript loader
+      config.module.rules.push({
+        test: /\.(ts|tsx)$/,
+        use: [
+          {
+            loader: require.resolve('ts-loader'),
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
+      });
+    }
     return config;
   },
   swc: () => ({
@@ -26,4 +50,4 @@ const config: StorybookConfig = {
   }),
 };
 
-export default config; 
+export default config;
